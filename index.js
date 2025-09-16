@@ -162,7 +162,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({
-  origin: 'http://localhost:3000', // chỉ cho React app gọi
+  origin: 'https://solemate-frontend-production.up.railway.app', // chỉ cho React app gọi
   methods: ['GET', 'POST', 'DELETE', 'PUT'],
   allowedHeaders: ['Content-Type']
 }));
