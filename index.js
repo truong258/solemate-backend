@@ -214,10 +214,11 @@ app.get('/cart', async (req, res) => {
 app.post('/cart', async (req, res) => {
   try {
     console.log('POST /cart body:', req.body);
-    const { product_id, quantity } = req.body;
+    const { product_id, quantity, price } = req.body;
     if (!product_id) return res.status(400).send('Thiếu product_id');
 
     const qty = parseInt(quantity || 1, 10);
+    const parsedPrice = parseFloat(price);
 
     // Kiểm tra product tồn tại (tốt để tránh FK error)
     const prod = await pool.query('SELECT id FROM products WHERE id = $1', [product_id]);
@@ -235,8 +236,8 @@ app.post('/cart', async (req, res) => {
       return res.status(200).json(updated.rows[0]);
     } else {
       const inserted = await pool.query(
-        'INSERT INTO cart (product_id, quantity) VALUES ($1, $2) RETURNING *',
-        [product_id, qty]
+        'INSERT INTO cart (product_id, quantity, price) VALUES ($1, $2, $3) RETURNING *',
+        [product_id, qty,parsedPrice]
       );
       return res.status(201).json(inserted.rows[0]);
     }
