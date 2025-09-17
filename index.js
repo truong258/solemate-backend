@@ -214,7 +214,7 @@ app.get('/cart', async (req, res) => {
 app.post('/cart', async (req, res) => {
   try {
     console.log('POST /cart body:', req.body);
-    const { product_id, quantity, price } = req.body;
+    const { product_id, quantity, price, product_name } = req.body;
     if (!product_id) return res.status(400).send('Thiếu product_id');
 
     const qty = parseInt(quantity || 1, 10);
@@ -236,8 +236,8 @@ app.post('/cart', async (req, res) => {
       return res.status(200).json(updated.rows[0]);
     } else {
       const inserted = await pool.query(
-        'INSERT INTO cart (product_id, quantity, price) VALUES ($1, $2, $3) RETURNING *',
-        [product_id, qty,parsedPrice]
+        'INSERT INTO cart (product_id, quantity, price,product_name) VALUES ($1, $2, $3,$4) RETURNING *',
+        [product_id, qty,parsedPrice,product_name],
       );
       return res.status(201).json(inserted.rows[0]);
     }
