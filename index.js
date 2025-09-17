@@ -202,7 +202,7 @@ app.get('/products/:id', async (req, res) => {
 // GET cart (join với products để lấy tên, giá, ảnh)
 app.get('/cart', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM cart INNERJOIN products on cart.product_id = products.id ORDER BY id');
+    const result = await pool.query('SELECT * FROM cart INNER JOIN products ON cart.product_id = products.id');
     res.json(result.rows);
   } catch (err) {
     console.error('GET /cart error:', err);
