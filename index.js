@@ -199,6 +199,48 @@ app.get('/products/:id', async (req, res) => {
   }
 });
 
+//insert product by id
+
+app.post('/products', async (req, res) => {
+
+  try {
+
+    const { name, descrip, price,stock, category, image } = req.body;
+
+    if (!name || !price || !category) {
+
+      return res.status(400).json({ message: 'Thieu thong tin san pham' });
+
+    }
+
+ 
+
+ 
+
+    const sId = await pool.query('SELECT MAX(id) AS max_id FROM products');
+
+    const newId = (sId.rows[0].max_id || 0) + 1;
+
+ 
+
+    const result = await pool.query(
+
+      'INSERT INTO products (id,name,description, price,stock, category,image) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *',
+
+      [newId, name, descrip , price, stock, category, image]
+
+    )
+
+    res.status(201).json(result.rows[0]);
+
+  } catch (err) {
+
+    console.log("Error insert product",err);
+
+  }
+
+});
+
 // GET cart (join với products để lấy tên, giá, ảnh)
 app.get('/cart', async (req, res) => {
   try {
