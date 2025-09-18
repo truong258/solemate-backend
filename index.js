@@ -370,6 +370,17 @@ app.post('/login', async (req, res) => {
   }
 });
 
+
+app.delete('/cart', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM cart'); // Xóa toàn bộ dữ liệu
+    res.status(200).json({ message: 'Đã xóa toàn bộ giỏ hàng' });
+  } catch (err) {
+    console.error('Lỗi khi xóa toàn bộ cart:', err);
+    res.status(500).json({ message: 'Lỗi server khi xóa cart' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server đang chạy tại http://localhost:${PORT}`);
 });
